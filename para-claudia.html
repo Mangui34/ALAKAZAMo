@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Para Claudia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PARA CLAUDIA — novela visual en un solo archivo
+   Paleta: negro profundo · burdeos · dorado · rosa pálido
+   ============================================================ */
+:root{
+  --negro:#0a0508;
+  --negro-2:#120a10;
+  --burdeos:#5c1428;
+  --burdeos-claro:#8a2740;
+  --dorado:#c9a45c;
+  --dorado-claro:#e8cf9a;
+  --rosa:#f2c4cf;
+  --rosa-suave:#e8a8b8;
+  --texto:#e9dfe2;
+  --texto-suave:#bfa9b0;
+  --memoria-bg:#1c1208;
+  --memoria-texto:#f3ddb0;
+  --ease:cubic-bezier(.25,.8,.25,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{height:100%}
+body{
+  min-height:100%;
+  background:var(--negro);
+  color:var(--texto);
+  font-family:'Lora',Georgia,serif;
+  font-size:clamp(16px,2.6vw,19px);
+  line-height:1.75;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  transition:background 2s var(--ease);
+}
+::selection{background:var(--burdeos);color:var(--rosa)}
+
+/* ---------- Capas de fondo / atmósferas ---------- */
+#bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  transition:opacity 1.8s var(--ease);
+}
+.bg-layer{position:absolute;inset:-6%;transition:opacity 2.2s var(--ease);opacity:0;will-change:transform}
+.bg-layer.on{opacity:1}
+
+/* Bosque (Crepúsculo): verdes fríos, niebla */
+.atm-bosque{background:
+  radial-gradient(120% 80% at 50% 110%, rgba(20,46,38,.85), transparent 60%),
+  radial-gradient(90% 60% at 20% 0%, rgba(16,28,40,.9), transparent 70%),
+  linear-gradient(180deg,#060a0c 0%,#0a1410 55%,#04080a 100%)}
+.atm-bosque::before{content:"";position:absolute;inset:0;
+  background:
+   linear-gradient(90deg,transparent 0 8%, rgba(4,8,8,.55) 8.5% 10%, transparent 10.5% 24%, rgba(4,8,8,.5) 24.5% 26.5%, transparent 27% 47%, rgba(4,8,8,.6) 47.5% 50%, transparent 50.5% 71%, rgba(4,8,8,.5) 71.5% 73.5%, transparent 74% 90%, rgba(4,8,8,.55) 90.5% 93%, transparent 93.5%);
+  opacity:.7;filter:blur(2px)}
+.atm-bosque::after{content:"";position:absolute;left:-20%;right:-20%;bottom:-10%;height:55%;
+  background:radial-gradient(60% 100% at 50% 100%, rgba(150,170,180,.14), transparent 70%);
+  filter:blur(18px);animation:niebla 14s ease-in-out infinite alternate}
+@keyframes niebla{from{transform:translateX(-4%) }to{transform:translateX(4%)}}
+
+/* Muros (AoT): cielo burdeos, siluetas colosales */
+.atm-muros{background:
+  radial-gradient(100% 70% at 50% 0%, rgba(92,20,40,.55), transparent 65%),
+  linear-gradient(180deg,#160409 0%,#2a0a14 45%,#0a0508 100%)}
+.atm-muros::before{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;
+  background:
+   linear-gradient(180deg, transparent 0, #050203 14%),
+   repeating-linear-gradient(90deg, #050203 0 56px, #0b0508 56px 64px);
+  clip-path:polygon(0 18%,4% 18%,4% 10%,9% 10%,9% 18%,14% 18%,14% 10%,19% 10%,19% 18%,26% 18%,26% 6%,31% 6%,31% 18%,38% 18%,38% 10%,43% 10%,43% 18%,50% 18%,50% 2%,56% 2%,56% 18%,63% 18%,63% 10%,68% 10%,68% 18%,75% 18%,75% 6%,80% 6%,80% 18%,87% 18%,87% 10%,92% 10%,92% 18%,100% 18%,100% 100%,0 100%)}
+.atm-muros::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(40% 30% at 72% 22%, rgba(201,164,92,.18), transparent 70%)}
+
+/* Minas: cristales que laten */
+.atm-minas{background:
+  radial-gradient(80% 60% at 50% 100%, rgba(34,16,8,.9), transparent 70%),
+  linear-gradient(180deg,#070406 0%,#150a10 60%,#0c0608 100%)}
+.cristal{position:absolute;bottom:-2%;filter:blur(.5px);opacity:.9;
+  background:linear-gradient(160deg, rgba(232,207,154,.95), rgba(201,164,92,.35) 55%, rgba(92,20,40,.25));
+  clip-path:polygon(50% 0,90% 35%,72% 100%,28% 100%,10% 35%);
+  animation:latir 5s ease-in-out infinite;box-shadow:0 0 60px rgba(201,164,92,.25)}
+.cristal.c1{left:6%;width:90px;height:200px;animation-delay:0s}
+.cristal.c2{left:18%;width:55px;height:120px;animation-delay:1.2s;opacity:.7}
+.cristal.c3{right:8%;width:110px;height:240px;animation-delay:.6s}
+.cristal.c4{right:24%;width:48px;height:100px;animation-delay:2s;opacity:.65}
+@keyframes latir{0%,100%{filter:brightness(.85) blur(.5px)}50%{filter:brightness(1.25) blur(.5px)}}
+
+/* Espejos: columnas de luz fría con destellos rosas */
+.atm-espejos{background:linear-gradient(180deg,#0b0610 0%,#170a18 55%,#0a0510 100%)}
+.atm-espejos::before{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg, transparent 0 11%, rgba(242,196,207,.05) 11% 12.5%, rgba(232,207,154,.07) 12.5% 13%, transparent 13% 24%);
+  animation:espejo 9s ease-in-out infinite alternate}
+@keyframes espejo{from{opacity:.5}to{opacity:1}}
+.atm-espejos::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(50% 35% at 50% 60%, rgba(138,39,64,.22), transparent 70%)}
+
+/* Torre de la campana: oro cálido */
+.atm-torre{background:
+  radial-gradient(90% 70% at 50% 30%, rgba(201,164,92,.16), transparent 65%),
+  linear-gradient(180deg,#140d06 0%,#1f1408 50%,#0d0805 100%)}
+.atm-torre::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(35% 25% at 50% 30%, rgba(232,207,154,.18), transparent 70%);
+  animation:halo 6s ease-in-out infinite alternate}
+@keyframes halo{from{opacity:.5}to{opacity:1}}
+
+/* Final: negro con aliento rosa */
+.atm-final{background:
+  radial-gradient(80% 60% at 50% 100%, rgba(242,196,207,.10), transparent 65%),
+  radial-gradient(70% 50% at 50% 0%, rgba(92,20,40,.35), transparent 70%),
+  #070407}
+
+/* Memoria: sepia dorado */
+.atm-memoria{background:
+  radial-gradient(100% 80% at 50% 20%, rgba(201,164,92,.20), transparent 70%),
+  linear-gradient(180deg,#1a1108 0%,#241708 55%,#120c05 100%)}
+
+#vineta{position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0,0,0,.55) 100%)}
+
+canvas#particulas{position:fixed;inset:0;z-index:1;pointer-events:none}
+
+/* ---------- Escenario ---------- */
+#stage{position:relative;z-index:3;max-width:660px;margin:0 auto;
+  padding:max(5vh,32px) 22px 12vh;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+
+.eyebrow{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.42em;text-transform:uppercase;
+  color:var(--dorado);text-align:center;margin-bottom:14px;opacity:0}
+.scene-title{font-family:'Cinzel',serif;font-weight:600;font-size:clamp(1.5rem,5.4vw,2.3rem);
+  letter-spacing:.08em;text-align:center;color:var(--rosa);margin-bottom:6px;opacity:0;
+  text-shadow:0 0 30px rgba(242,196,207,.25)}
+.ornamento{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 30px;opacity:0}
+.ornamento .linea{height:1px;width:70px;background:linear-gradient(90deg,transparent,var(--dorado));}
+.ornamento .linea.r{background:linear-gradient(90deg,var(--dorado),transparent)}
+.ornamento svg{flex:none}
+
+.parrafo{margin-bottom:1.35em;opacity:0;transform:translateY(14px)}
+.parrafo.dialogo{padding-left:18px;border-left:2px solid var(--burdeos-claro);font-style:italic;color:var(--rosa-suave)}
+.parrafo .quien{font-family:'Cinzel',serif;font-style:normal;font-size:.78rem;letter-spacing:.3em;
+  color:var(--dorado);display:block;margin-bottom:4px}
+.parrafo .enfasis{color:var(--dorado-claro);font-style:italic}
+.visible{animation:aparecer 1.1s var(--ease) forwards}
+@keyframes aparecer{to{opacity:1;transform:translateY(0)}}
+
+/* ---------- Decisiones ---------- */
+.choices{display:flex;flex-direction:column;gap:14px;margin-top:34px;opacity:0}
+.choices.visible{animation:aparecer 1s var(--ease) forwards}
+.choice{appearance:none;background:rgba(92,20,40,.18);border:1px solid rgba(201,164,92,.45);
+  color:var(--texto);font-family:'Lora',serif;font-size:1rem;line-height:1.5;
+  padding:15px 20px;cursor:pointer;text-align:left;position:relative;
+  transition:all .35s var(--ease);backdrop-filter:blur(2px)}
+.choice::before{content:"✦";color:var(--dorado);margin-right:10px;font-size:.8em}
+.choice:hover,.choice:focus-visible{background:rgba(138,39,64,.4);border-color:var(--dorado);
+  transform:translateX(6px);color:#fff;box-shadow:0 0 24px rgba(201,164,92,.18)}
+.choice:focus-visible{outline:2px solid var(--dorado);outline-offset:3px}
+.btn-continuar{appearance:none;display:block;margin:38px auto 0;background:transparent;
+  border:1px solid var(--dorado);color:var(--dorado-claro);font-family:'Cinzel',serif;
+  font-size:.86rem;letter-spacing:.34em;text-transform:uppercase;padding:14px 34px 14px 38px;
+  cursor:pointer;opacity:0;transition:all .35s var(--ease)}
+.btn-continuar.visible{animation:aparecer 1s var(--ease) forwards}
+.btn-continuar:hover,.btn-continuar:focus-visible{background:var(--burdeos);border-color:var(--rosa);
+  color:#fff;letter-spacing:.42em}
+.btn-continuar:focus-visible{outline:2px solid var(--rosa);outline-offset:3px}
+
+/* ---------- Memorias (flashbacks dorados) ---------- */
+.memoria-marco{border:1px solid rgba(201,164,92,.55);padding:30px 26px 34px;position:relative;
+  background:linear-gradient(160deg, rgba(201,164,92,.07), rgba(36,23,8,.45));
+  box-shadow:0 0 60px rgba(201,164,92,.12), inset 0 0 40px rgba(201,164,92,.05)}
+.memoria-marco::before,.memoria-marco::after{content:"";position:absolute;width:18px;height:18px;border:1px solid var(--dorado)}
+.memoria-marco::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.memoria-marco::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.memoria-marco .parrafo{color:var(--memoria-texto)}
+.memoria-marco .parrafo .enfasis{color:#fff}
+.sello-recuerdo{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--dorado);text-align:center;margin-bottom:22px;opacity:0}
+.sello-recuerdo::before,.sello-recuerdo::after{content:" ❧ ";letter-spacing:0}
+
+/* ---------- Pantalla de título ---------- */
+#titulo{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:24px;
+  background:radial-gradient(80% 60% at 50% 40%, rgba(92,20,40,.30), transparent 70%), var(--negro);
+  transition:opacity 1.6s var(--ease), visibility 1.6s}
+#titulo.oculto{opacity:0;visibility:hidden}
+.titulo-pre{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--dorado);opacity:0;animation:aparecer 2s var(--ease) .4s forwards}
+.titulo-nombre{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(3rem,15vw,6.4rem);
+  letter-spacing:.12em;color:var(--rosa);margin:18px 0 8px;line-height:1.05;
+  text-shadow:0 0 50px rgba(242,196,207,.35), 0 0 120px rgba(138,39,64,.5)}
+.titulo-nombre span{display:inline-block;opacity:0;animation:letra 1.4s var(--ease) forwards}
+@keyframes letra{from{opacity:0;transform:translateY(26px) scale(.92);filter:blur(8px)}
+  to{opacity:1;transform:none;filter:blur(0)}}
+.titulo-sub{font-family:'Cinzel',serif;font-size:clamp(.85rem,3vw,1.1rem);letter-spacing:.3em;
+  color:var(--dorado-claro);text-transform:uppercase;opacity:0;animation:aparecer 2s var(--ease) 2.2s forwards}
+.titulo-dedica{font-style:italic;color:var(--texto-suave);margin-top:26px;max-width:420px;
+  opacity:0;animation:aparecer 2s var(--ease) 2.9s forwards}
+#btn-empezar{margin-top:44px;opacity:0;animation:aparecer 1.6s var(--ease) 3.6s forwards, latido 2.6s ease-in-out 5.4s infinite}
+@keyframes latido{0%,100%{box-shadow:0 0 0 rgba(201,164,92,0)}50%{box-shadow:0 0 30px rgba(201,164,92,.35)}}
+#btn-empezar.visible{opacity:1}
+
+/* ---------- Campana interactiva ---------- */
+.campana-wrap{display:flex;flex-direction:column;align-items:center;margin:30px 0 8px;opacity:0}
+.campana-wrap.visible{animation:aparecer 1s var(--ease) forwards}
+.campana{cursor:pointer;width:120px;height:150px;position:relative;transform-origin:50% 8%;
+  transition:filter .3s;border:none;background:none;padding:0}
+.campana:hover{filter:drop-shadow(0 0 18px rgba(232,207,154,.5))}
+.campana:focus-visible{outline:2px solid var(--dorado);outline-offset:6px;border-radius:50%}
+.campana.sonando{animation:campanada 1.6s var(--ease)}
+@keyframes campanada{0%{transform:rotate(0)}12%{transform:rotate(16deg)}30%{transform:rotate(-13deg)}
+  48%{transform:rotate(9deg)}66%{transform:rotate(-6deg)}82%{transform:rotate(3deg)}100%{transform:rotate(0)}}
+.campana-label{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.34em;color:var(--dorado);
+  text-transform:uppercase;margin-top:16px;text-align:center}
+.pista{font-size:.85rem;font-style:italic;color:var(--texto-suave);margin-top:6px;text-align:center}
+
+/* ---------- Mensaje final ---------- */
+.mensaje-final{border:1px solid var(--rosa);padding:34px 28px;text-align:center;margin-top:10px;
+  background:linear-gradient(170deg, rgba(242,196,207,.06), rgba(92,20,40,.18));
+  box-shadow:0 0 80px rgba(242,196,207,.10);opacity:0}
+.mensaje-final.visible{animation:aparecer 1.4s var(--ease) forwards}
+.mensaje-final .firma{font-family:'Cinzel',serif;letter-spacing:.3em;color:var(--dorado);
+  font-size:.85rem;margin-top:22px;text-transform:uppercase}
+.mensaje-final p{color:var(--rosa);font-size:1.08rem;font-style:italic;white-space:pre-line}
+
+/* ---------- Jardín final (lirios y tulipanes CSS) ---------- */
+.jardin{display:flex;justify-content:center;align-items:flex-end;gap:6px;margin:34px 0 0;height:120px;opacity:0}
+.jardin.visible{animation:aparecer 1.5s var(--ease) forwards}
+.flor{position:relative;width:34px;display:flex;flex-direction:column;align-items:center;
+  transform:translateY(20px) scale(.7);opacity:0;animation:brotar 1.6s var(--ease) forwards}
+@keyframes brotar{to{transform:translateY(0) scale(1);opacity:1}}
+.flor .tallo{width:2px;height:58px;background:linear-gradient(180deg,#4a6b3a,#27401f)}
+.flor .cabeza{position:absolute;top:-2px;animation:mecer 4.5s ease-in-out infinite}
+@keyframes mecer{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+/* tulipán: copa cerrada */
+.tulipan .cabeza{width:24px;height:30px}
+.tulipan .petalo{position:absolute;bottom:0;width:14px;height:28px;border-radius:50% 50% 38% 38%/65% 65% 35% 35%;
+  background:linear-gradient(180deg,var(--rosa),var(--burdeos-claro))}
+.tulipan .petalo:nth-child(1){left:0;transform:rotate(-12deg)}
+.tulipan .petalo:nth-child(2){right:0;transform:rotate(12deg)}
+.tulipan .petalo:nth-child(3){left:5px;background:linear-gradient(180deg,#fbdce4,var(--rosa-suave))}
+/* lirio: seis pétalos abiertos */
+.lirio .cabeza{width:34px;height:34px}
+.lirio .petalo{position:absolute;left:50%;top:50%;width:9px;height:20px;margin:-19px 0 0 -4.5px;
+  border-radius:50% 50% 50% 50%/72% 72% 28% 28%;transform-origin:50% 95%;
+  background:linear-gradient(180deg,#fde8ee,var(--rosa) 60%,var(--rosa-suave))}
+.lirio .petalo:nth-child(1){transform:rotate(0)}
+.lirio .petalo:nth-child(2){transform:rotate(60deg)}
+.lirio .petalo:nth-child(3){transform:rotate(120deg)}
+.lirio .petalo:nth-child(4){transform:rotate(180deg)}
+.lirio .petalo:nth-child(5){transform:rotate(240deg)}
+.lirio .petalo:nth-child(6){transform:rotate(300deg)}
+.lirio .centro{position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px;
+  border-radius:50%;background:var(--dorado);box-shadow:0 0 10px var(--dorado)}
+
+/* glitch de cuarta pared */
+.glitch{animation:glitch .9s steps(2) 2}
+@keyframes glitch{0%,100%{transform:none;filter:none}20%{transform:translateX(-3px);filter:hue-rotate(40deg)}
+  40%{transform:translateX(3px) skewX(1deg)}60%{transform:translateY(-2px);filter:invert(.08)}
+  80%{transform:translateX(-2px)}}
+
+@media (max-width:480px){
+  #stage{padding:max(4vh,24px) 18px 10vh}
+  .choice{font-size:.95rem;padding:13px 16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.2s !important}
+  .parrafo,.choices,.btn-continuar,.eyebrow,.scene-title,.ornamento{opacity:1 !important;transform:none !important}
+  canvas#particulas{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="bg">
+  <div class="bg-layer atm-bosque" data-atm="bosque"></div>
+  <div class="bg-layer atm-muros" data-atm="muros"></div>
+  <div class="bg-layer atm-minas" data-atm="minas">
+    <div class="cristal c1"></div><div class="cristal c2"></div>
+    <div class="cristal c3"></div><div class="cristal c4"></div>
+  </div>
+  <div class="bg-layer atm-espejos" data-atm="espejos"></div>
+  <div class="bg-layer atm-torre" data-atm="torre"></div>
+  <div class="bg-layer atm-final" data-atm="final"></div>
+  <div class="bg-layer atm-memoria" data-atm="memoria"></div>
+</div>
+<canvas id="particulas"></canvas>
+<div id="vineta"></div>
+
+<div id="titulo">
+  <div class="titulo-pre">Una historia escrita solo para ti</div>
+  <h1 class="titulo-nombre" id="nombre-animado">CLAUDIA</h1>
+  <div class="titulo-sub">Entre el crepúsculo y los muros</div>
+  <p class="titulo-dedica">Hay historias que se leen.<br>Esta, además, te estaba esperando.</p>
+  <button class="btn-continuar" id="btn-empezar">Despertar</button>
+</div>
+
+<main id="stage" aria-live="polite"></main>
+
+<script>
+/* ====== utilidades ====== */
+const $ = s => document.querySelector(s);
+const stage = $('#stage');
+let estado = { paciencia:false, alto:false, cristal:false, espejo:false };
+
+/* ====== ornamento SVG (lirio estilizado) ====== */
+const ORN = `<svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+  <g fill="none" stroke="#c9a45c" stroke-width="1">
+    <path d="M13 3 C10 8 10 12 13 16 C16 12 16 8 13 3 Z"/>
+    <path d="M5 9 C8 11 11 13 13 16 C9 16 6 13 5 9 Z"/>
+    <path d="M21 9 C18 11 15 13 13 16 C17 16 20 13 21 9 Z"/>
+    <circle cx="13" cy="19" r="1.6" fill="#f2c4cf" stroke="none"/>
+  </g></svg>`;
+</script>
+<script>
+/* ============================================================
+   HISTORIA — nodos narrativos
+   tipos: escena normal (choices o next), memoria (dorada), campana, final
+   ============================================================ */
+const HISTORIA = {
+
+/* ───────────── ACTO I · EL BOSQUE ───────────── */
+bosque: {
+  atm:'bosque', part:'niebla',
+  eyebrow:'Acto I', titulo:'El Bosque del Crepúsculo',
+  parrafos:[
+    `Abres los ojos. El bosque respira a tu alrededor: niebla baja, helechos empapados, una luz verde y fría que se filtra entre abetos imposiblemente altos. Huele a lluvia reciente y a tierra removida. No recuerdas cómo has llegado aquí.`,
+    `<span class="enfasis">Forks</span>, piensas, sin saber por qué. Este sitio tiene nombre de pueblo pequeño y de cielo eternamente gris. De historia que empieza con alguien nuevo llegando a donde no esperaba quedarse.`,
+    `Y entonces lo ves. En mitad del sendero, imposible e innegable: <span class="enfasis">un lirio rosa</span>. Brilla con luz propia, suave, como una pantalla encendida en la oscuridad.`,
+    `Vibra. Una vez. Dos veces. Exactamente como una notificación.`
+  ],
+  choices:[
+    {t:'Tocar el lirio sin pensarlo dos veces', next:'memoria_whatsapp'},
+    {t:'Estudiarlo primero, como si fuera una disección: pétalos, estructura, anatomía', next:'bosque_b', set:'paciencia'}
+  ]
+},
+bosque_b: {
+  atm:'bosque', part:'niebla',
+  eyebrow:'Acto I', titulo:'El Bosque del Crepúsculo',
+  parrafos:[
+    `Te agachas y lo examinas antes de tocarlo. Seis pétalos en dos verticilos. Nervadura central marcada. Tu cabeza siempre ha funcionado así: entender la <span class="enfasis">anatomía</span> de las cosas antes de entregarte a ellas.`,
+    `El lirio parece aprobar tu paciencia. Su luz se vuelve más cálida, más dorada, y la vibración se convierte en un zumbido familiar. Lo has oído mil veces. Lo oyes cada día.`,
+    `Alargas la mano.`
+  ],
+  next:{t:'Tocarlo', next:'memoria_whatsapp'}
+},
+
+/* ── MEMORIA I ── */
+memoria_whatsapp: {
+  atm:'memoria', part:'oro', memoria:true,
+  sello:'Recuerdo · Donde todo empezó',
+  parrafos:[
+    `Un grupo de WhatsApp. Decenas de mensajes, nombres que entran y salen, conversaciones que se pisan unas a otras.`,
+    `Y entre todo ese ruido, un nombre que empieza a destacar sin que sepas señalar el momento exacto. Primero son respuestas sueltas. Luego son conversaciones que se alargan. Luego es la primera persona que buscas al abrir el móvil.`,
+    `Las grandes historias prometen comenzar con tormentas, profecías, ciudades en llamas. La vuestra empezó con un chat de grupo. <span class="enfasis">Y mira hasta dónde ha llegado.</span>`
+  ],
+  next:{t:'Volver', next:'muros'}
+},
+
+/* ───────────── ACTO II · LOS MUROS ───────────── */
+muros: {
+  atm:'muros', part:'brasas',
+  eyebrow:'Acto II', titulo:'Los Muros',
+  parrafos:[
+    `El bosque se abre de golpe y el mundo cambia de escala. Ante ti se alza un muro de cincuenta metros, tan largo que se funde con el horizonte por ambos lados. El cielo, detrás, arde en un burdeos oscuro de atardecer eterno.`,
+    `En lo alto del muro hay una silueta. Bufanda roja al viento. Te observa con esa calma de quien ya ha decidido que no eres una amenaza.`,
+    `<span class="quien">MIKASA</span>Llevas buen paso para alguien que acaba de despertar. La mayoría se queda en el bosque, dando vueltas. Tú has llegado hasta aquí.`,
+    `<span class="quien">MIKASA</span>El mundo es cruel. Pero también es muy bello. Al final, lo único que importa es tener claro <span class="enfasis">qué quieres proteger</span>.`,
+    `Antes de que puedas responder, algo cruza el cielo: una estela ardiente que gira sobre sí misma, como un disparo de fuego lanzado desde otro mundo. Y tras ella, durante un solo segundo, una figura con <span class="enfasis">alas blancas</span> que señala hacia lo alto del muro antes de desvanecerse.`
+  ],
+  choices:[
+    {t:'Subir el muro con Mikasa', next:'muros_alto', set:'alto'},
+    {t:'Preguntarle qué hay al otro lado', next:'muros_pregunta'}
+  ],
+  dialogoIdx:[2,3]
+},
+muros_alto: {
+  atm:'muros', part:'brasas',
+  eyebrow:'Acto II', titulo:'Sobre el Muro',
+  parrafos:[
+    `Subes. Te arden las piernas y el viento ahí arriba corta como un bisturí, pero cuando llegas a la cima entiendes por qué la gente muere por estas vistas.`,
+    `Desde aquí el mundo es enorme y tuyo a la vez. Mikasa asiente, casi sonríe. <span class="enfasis">Casi.</span>`,
+    `<span class="quien">MIKASA</span>La mayoría pregunta primero. Tú actúas. Eso te va a hacer falta donde vas.`,
+    `Al fondo, la luna rompe las nubes y proyecta un haz de luz plateada sobre la llanura. Un haz ancho, recto, vivo. Exactamente como el proyector de una sala oscura.`
+  ],
+  next:{t:'Mirar la luz', next:'memoria_avatar'},
+  dialogoIdx:[2]
+},
+muros_pregunta: {
+  atm:'muros', part:'brasas',
+  eyebrow:'Acto II', titulo:'Al Pie del Muro',
+  parrafos:[
+    `—¿Qué hay al otro lado? —preguntas.`,
+    `Mikasa tarda en contestar. Es de las que no malgastan palabras.`,
+    `<span class="quien">MIKASA</span>Lo mismo que a este lado: cosas que dan miedo y cosas que merecen la pena. La diferencia es que allí todavía no sabes cuáles son cuáles. Por eso hay que ir a verlo.`,
+    `Mientras habla, la luna rompe las nubes y proyecta un haz de luz plateada sobre la llanura. Un haz ancho, recto, vivo. Exactamente como el proyector de una sala oscura.`
+  ],
+  next:{t:'Mirar la luz', next:'memoria_avatar'},
+  dialogoIdx:[2]
+},
+
+/* ── MEMORIA II ── */
+memoria_avatar: {
+  atm:'memoria', part:'oro', memoria:true,
+  sello:'Recuerdo · La primera cita',
+  parrafos:[
+    `Una sala de cine. Butacas rojas, luz azul bañándolo todo: en la pantalla, un planeta entero de bosques bioluminiscentes. <span class="enfasis">Avatar.</span> La primera cita.`,
+    `Pandora era preciosa, eso es innegable. Pero la verdad —y esto él nunca lo ha contado del todo— es que se pasó media película pendiente de otra cosa: de la distancia exacta entre dos manos apoyadas en el mismo reposabrazos.`,
+    `Hay planetas alienígenas espectaculares. Y luego está lo de estar sentado al lado de la persona correcta por primera vez, que gana por goleada.`
+  ],
+  next:{t:'Volver', next:'minas'}
+},
+
+/* ───────────── ACTO III · LAS MINAS ───────────── */
+minas: {
+  atm:'minas', part:'oro',
+  eyebrow:'Acto III', titulo:'La Ciudad Bajo la Tierra',
+  parrafos:[
+    `Mikasa señala una grieta en la base del muro. Desciendes por escaleras talladas en roca viva hasta que el túnel se abre y te quedas sin aire: una ciudad subterránea entera, iluminada por <span class="enfasis">cristales colosales</span> que laten con luz dorada, como corazones de piedra.`,
+    `Apoyado contra una columna hay un hombre de baja estatura, capa verde y mirada de haber dormido tres horas en toda su vida. Te repasa de arriba abajo.`,
+    `<span class="quien">LEVI</span>Tch. Otra visita. Al menos no traes barro en las botas. Eso ya te pone por delante de la mayoría.`,
+    `<span class="quien">LEVI</span>Yo crecí aquí abajo, así que escucha, porque solo lo diré una vez: la gente que de verdad merece la pena no abunda. Ni aquí ni en la superficie. Cuando la encuentres, <span class="enfasis">no la sueltes</span>. Es el único consejo que doy gratis.`,
+    `Uno de los cristales late más fuerte que los demás. Su luz dorada tiene algo distinto. Algo que reconoces sin saber de qué.`
+  ],
+  choices:[
+    {t:'Apoyar la mano en el cristal', next:'memoria_minas', set:'cristal'},
+    {t:'Preguntarle a Levi por qué brilla así', next:'minas_b'}
+  ],
+  dialogoIdx:[2,3]
+},
+minas_b: {
+  atm:'minas', part:'oro',
+  eyebrow:'Acto III', titulo:'La Ciudad Bajo la Tierra',
+  parrafos:[
+    `<span class="quien">LEVI</span>¿Ese cristal? Brilla así desde hace tiempo. Dicen que estas piedras guardan lo que la gente vivió cerca de ellas. Recuerdos. Yo no creo en esas cosas.`,
+    `Hace una pausa. Mira el cristal. Luego a ti.`,
+    `<span class="quien">LEVI</span>...Pero ese late cuando tú te acercas, así que igual deberías tocarlo y dejar de hacerme perder el tiempo.`
+  ],
+  next:{t:'Tocar el cristal', next:'memoria_minas'},
+  dialogoIdx:[0,2]
+},
+
+/* ── MEMORIA III ── */
+memoria_minas: {
+  atm:'memoria', part:'oro', memoria:true,
+  sello:'Recuerdo · Bajo otra tierra',
+  parrafos:[
+    `Otras minas. Otro mundo. Sus padres delante, vosotros dos detrás, las voces rebotando en las galerías de piedra.`,
+    `Aquellas minas también brillaban, a su manera: no hacía falta magia, bastaba con el sitio, el día y la compañía. Una excursión en familia que podría haber sido una excursión cualquiera.`,
+    `Pero hay lugares que no se quedan grabados por lo que son, sino por <span class="enfasis">con quién los pisaste</span>. Y ese día, ese lugar precioso bajo tierra pasó a ser parte de la historia de los dos.`
+  ],
+  next:{t:'Volver', next:'espejos'}
+},
+
+/* ───────────── ACTO IV · LOS ESPEJOS ───────────── */
+espejos: {
+  atm:'espejos', part:'petalos',
+  eyebrow:'Acto IV', titulo:'La Sala de los Espejos',
+  parrafos:[
+    `Al fondo de la galería, una sala imposible: espejos del suelo al techo, colocados como una pequeña tienda infinita. Una cortina de terciopelo burdeos cuelga al fondo, mal cerrada, como la de un probador.`,
+    `De algún lugar lejano llega música. Siete voces. Un ritmo que conoces de memoria, de esos que el cuerpo reconoce antes que la cabeza: una canción que habla de <span class="enfasis">guerras que no se libran con espadas</span>, sino por dentro. Sonríes sin querer. Sabes perfectamente cuál es.`,
+    `Los espejos no te devuelven un solo reflejo. En uno llevas la capa verde de los exploradores. En otro, la piel te brilla levemente bajo una luz de bosque nublado. En otro, simplemente eres tú, con el móvil en la mano, leyendo algo.`
+  ],
+  choices:[
+    {t:'Mirarte de frente en el espejo del centro', next:'espejos_b', set:'espejo'},
+    {t:'Apartar la cortina de terciopelo', next:'memoria_bershka'}
+  ]
+},
+espejos_b: {
+  atm:'espejos', part:'petalos',
+  eyebrow:'Acto IV', titulo:'La Sala de los Espejos',
+  parrafos:[
+    `Te plantas frente al espejo central y todas las versiones de ti se giran a la vez, como si llevaran toda la historia esperando este momento.`,
+    `No hay monstruo, ni giro oscuro, ni reflejo maldito. Solo tú, multiplicada: la que analiza, la que se ríe, la que protege lo suyo con una lealtad de bufanda roja. Todas valen. <span class="enfasis">Todas son tuyas.</span>`,
+    `Detrás de tu reflejo, la cortina de terciopelo se mueve sola, invitándote.`
+  ],
+  next:{t:'Apartar la cortina', next:'memoria_bershka'}
+},
+
+/* ── MEMORIA IV ── */
+memoria_bershka: {
+  atm:'memoria', part:'oro', memoria:true,
+  sello:'Recuerdo · Tras la cortina',
+  parrafos:[
+    `Un probador de Bershka. Luz blanca, ropa en la percha, una cortina que nunca cierra del todo.`,
+    `Entrasteis los dos, entre risas, en ese espacio diminuto donde no cabe nadie y cupisteis perfectamente. No pasó nada extraordinario, y precisamente por eso fue extraordinario: uno de esos momentos pequeños, robados al día más normal del mundo.`,
+    `Él lo guarda como si fuera de oro. No te lo dice, pero está en su lista de momentos favoritos. <span class="enfasis">(Sí, él. El que ha escrito todo esto. Se le empieza a notar, ¿verdad?)</span>`
+  ],
+  next:{t:'Volver', next:'torre'}
+},
+
+/* ───────────── ACTO V · LA TORRE ───────────── */
+torre: {
+  atm:'torre', part:'oro', campana:true,
+  eyebrow:'Acto V', titulo:'La Torre de la Campana',
+  parrafos:[
+    `Sales de la sala de espejos a una escalera de caracol que sube y sube, hasta una torre abierta al cielo del atardecer. El aire aquí es cálido, dorado, quieto.`,
+    `Y en el centro, colgando de un soporte de hierro forjado, una campanita pequeña de metal pulido. La reconoces al instante. Grabadas en el metal, tres palabras:`,
+    `<span class="enfasis">«Ring for a Kiss»</span>`,
+    `Ya sabes lo que hay que hacer.`
+  ]
+},
+
+/* ── MEMORIA V (tras tocar la campana) ── */
+memoria_campana: {
+  atm:'memoria', part:'oro', memoria:true,
+  sello:'Recuerdo · El regalo',
+  parrafos:[
+    `Esta campana existe. Es real. La elegiste tú, y se la regalaste a él.`,
+    `Un objeto diminuto con un contrato enorme grabado encima: suena la campana, se paga el peaje. Sin excepciones, sin letra pequeña.`,
+    `De todos los regalos posibles, le diste uno que es una <span class="enfasis">promesa que se puede tocar</span>. Y él la hace sonar más veces de las que admite.`
+  ],
+  next:{t:'Seguir la última luz', next:'final'}
+},
+
+/* ───────────── FINAL · LA CUARTA PARED ───────────── */
+final: {
+  atm:'final', part:'petalos', final:true,
+  eyebrow:'Final', titulo:'Claudia',
+  parrafos:[
+    `La niebla se disuelve. Los muros se vuelven transparentes. Los cristales, los espejos, la torre… todo empieza a apagarse suavemente, como un cine cuando encienden las luces.`,
+    `Porque todo esto era un decorado, Claudia. Siempre lo fue.`,
+    `No estás en Forks. No estás dentro de los muros, ni bajo tierra, ni en ninguna torre. Estás mirando tu móvil —probablemente en el sofá, o en la cama— leyendo algo que alguien construyó para ti pieza a pieza, pantalla a pantalla, pensando en cada detalle: <span class="enfasis">¿esto la hará sonreír?</span>`,
+    `Mikasa no existe. Levi no existe. Los cristales no laten de verdad.`,
+    `Pero la persona que los puso aquí porque sabe exactamente lo que te gusta… esa sí existe. Y tenía algo que decirte.`
+  ]
+}
+};
+</script>
+<script>
+/* ============================================================
+   MOTOR — partículas, escenas, campana, final
+   ============================================================ */
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- partículas ---------- */
+const cv = $('#particulas'), ctx = cv.getContext('2d');
+let W,H,parts=[],modo='petalos',rafId=null;
+function resize(){W=cv.width=innerWidth*devicePixelRatio;H=cv.height=innerHeight*devicePixelRatio;
+  cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';}
+addEventListener('resize',resize);resize();
+
+const MODOS = {
+  petalos:{n:26, mk:()=>({x:Math.random()*W,y:-20,vx:(Math.random()-.5)*.5,vy:.4+Math.random()*.7,
+    r:(4+Math.random()*6)*devicePixelRatio,a:Math.random()*Math.PI*2,va:(Math.random()-.5)*.04,
+    o:.35+Math.random()*.45,c:Math.random()<.7?'242,196,207':'232,168,184'}),
+    draw:p=>{ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);
+      ctx.fillStyle=`rgba(${p.c},${p.o})`;ctx.beginPath();
+      ctx.ellipse(0,0,p.r,p.r*.55,0,0,Math.PI*2);ctx.fill();ctx.restore();}},
+  oro:{n:34, mk:()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,
+    vy:-(.15+Math.random()*.35),r:(1+Math.random()*2.4)*devicePixelRatio,a:0,va:0,
+    o:.2+Math.random()*.6,c:'232,207,154',tw:Math.random()*Math.PI*2}),
+    draw:p=>{p.tw+=.04;const o=p.o*(.6+.4*Math.sin(p.tw));
+      ctx.fillStyle=`rgba(${p.c},${o})`;ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=`rgba(255,244,214,${o*.5})`;ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r*.4,0,Math.PI*2);ctx.fill();}},
+  brasas:{n:30, mk:()=>({x:Math.random()*W,y:H+10,vx:(Math.random()-.5)*.4,
+    vy:-(.5+Math.random()*1.1),r:(1.2+Math.random()*2.2)*devicePixelRatio,a:0,va:0,
+    o:.3+Math.random()*.6,c:Math.random()<.6?'201,120,72':'201,164,92'}),
+    draw:p=>{ctx.fillStyle=`rgba(${p.c},${p.o})`;ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}},
+  niebla:{n:18, mk:()=>({x:Math.random()*W,y:H*.4+Math.random()*H*.6,vx:.1+Math.random()*.3,
+    vy:0,r:(50+Math.random()*110)*devicePixelRatio,a:0,va:0,o:.025+Math.random()*.04,c:'170,190,195'}),
+    draw:p=>{const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+      g.addColorStop(0,`rgba(${p.c},${p.o})`);g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}}
+};
+function setParticulas(m){
+  modo=m;const cfg=MODOS[m];parts=Array.from({length:cfg.n},()=>{
+    const p=cfg.mk();p.y=Math.random()*H;return p;});
+}
+function tick(){
+  ctx.clearRect(0,0,W,H);const cfg=MODOS[modo];
+  for(const p of parts){
+    p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
+    if(modo==='petalos')p.x+=Math.sin(p.y*.01)*.4;
+    if(p.y>H+60||p.y<-80||p.x>W+160||p.x<-160)Object.assign(p,cfg.mk());
+    cfg.draw(p);
+  }
+  rafId=requestAnimationFrame(tick);
+}
+if(!reduceMotion){setParticulas('petalos');tick();}
+
+/* ráfaga de pétalos (campana / final) */
+function rafaga(n=40){
+  if(reduceMotion)return;
+  for(let i=0;i<n;i++){const p=MODOS.petalos.mk();
+    p.x=W/2+(Math.random()-.5)*W*.3;p.y=H*.35;
+    p.vx=(Math.random()-.5)*3;p.vy=-1-Math.random()*2.5;p.o=.7;
+    parts.push(p);}
+}
+
+/* ---------- atmósferas + parallax ---------- */
+function setAtm(nombre){
+  document.querySelectorAll('.bg-layer').forEach(l=>
+    l.classList.toggle('on', l.dataset.atm===nombre));
+}
+let px=0,py=0;
+function parallax(x,y){
+  px=x;py=y;
+  document.querySelectorAll('.bg-layer.on').forEach(l=>{
+    l.style.transform=`translate(${px*10}px,${py*6}px)`;});
+}
+addEventListener('mousemove',e=>{
+  if(reduceMotion)return;
+  parallax((e.clientX/innerWidth-.5),(e.clientY/innerHeight-.5));
+});
+addEventListener('deviceorientation',e=>{
+  if(reduceMotion||e.gamma==null)return;
+  parallax(Math.max(-1,Math.min(1,e.gamma/30)),Math.max(-1,Math.min(1,(e.beta-45)/40)));
+});
+
+/* ---------- sonido de campana (WebAudio, sin archivos) ---------- */
+let actx=null;
+function sonarCampana(){
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    if(actx.state==='suspended')actx.resume();
+    const now=actx.currentTime;
+    [[1318.5,.16],[1760,.10],[2637,.06],[659.2,.08]].forEach(([f,v],i)=>{
+      const o=actx.createOscillator(),g=actx.createGain();
+      o.type='sine';o.frequency.value=f*(1+(Math.random()-.5)*.002);
+      g.gain.setValueAtTime(.0001,now);
+      g.gain.exponentialRampToValueAtTime(v,now+.012);
+      g.gain.exponentialRampToValueAtTime(.0001,now+2.4+i*.2);
+      o.connect(g).connect(actx.destination);
+      o.start(now);o.stop(now+2.8);
+    });
+  }catch(e){/* sin audio, no pasa nada */}
+}
+
+/* ---------- renderizado de escenas ---------- */
+function escenaHTML(n){
+  let html='';
+  if(n.memoria){
+    html+=`<div class="memoria-marco">`;
+    html+=`<div class="sello-recuerdo">${n.sello}</div>`;
+  }else{
+    html+=`<div class="eyebrow">${n.eyebrow}</div>`;
+    html+=`<h2 class="scene-title">${n.titulo}</h2>`;
+    html+=`<div class="ornamento"><span class="linea"></span>${ORN}<span class="linea r"></span></div>`;
+  }
+  n.parrafos.forEach((p,i)=>{
+    const dial = p.includes('class="quien"');
+    html+=`<p class="parrafo${dial?' dialogo':''}">${p}</p>`;
+  });
+  if(n.memoria)html+=`</div>`;
+  if(n.campana){
+    html+=`<div class="campana-wrap">
+      <button class="campana" id="la-campana" aria-label="Tocar la campana">
+        <svg viewBox="0 0 120 150" width="120" height="150" aria-hidden="true">
+          <line x1="60" y1="0" x2="60" y2="14" stroke="#8a6a3a" stroke-width="3"/>
+          <circle cx="60" cy="16" r="5" fill="#c9a45c"/>
+          <path d="M60 22 C30 22 26 62 24 86 C22 102 14 110 14 114 L106 114 C106 110 98 102 96 86 C94 62 90 22 60 22 Z"
+            fill="url(#gradCampana)" stroke="#8a6a3a" stroke-width="1.5"/>
+          <ellipse cx="60" cy="117" rx="48" ry="7" fill="#a8843e"/>
+          <circle cx="60" cy="130" r="9" fill="#e8cf9a" stroke="#8a6a3a"/>
+          <text x="60" y="78" text-anchor="middle" font-family="Cinzel,serif" font-size="11"
+            fill="#3a2410" letter-spacing="1">Ring for</text>
+          <text x="60" y="94" text-anchor="middle" font-family="Cinzel,serif" font-size="11"
+            fill="#3a2410" letter-spacing="1">a Kiss</text>
+          <defs><linearGradient id="gradCampana" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f3ddb0"/><stop offset=".5" stop-color="#c9a45c"/>
+            <stop offset="1" stop-color="#8a6a3a"/></linearGradient></defs>
+        </svg>
+      </button>
+      <div class="campana-label">Ring for a Kiss</div>
+      <div class="pista">(tócala — ya conoces las reglas)</div>
+    </div>`;
+  }
+  if(n.choices){
+    html+=`<div class="choices" role="group" aria-label="Decisiones">`;
+    n.choices.forEach((c,i)=>html+=`<button class="choice" data-i="${i}">${c.t}</button>`);
+    html+=`</div>`;
+  }else if(n.next){
+    html+=`<button class="btn-continuar">${n.next.t}</button>`;
+  }
+  return html;
+}
+
+function mostrar(id){
+  const n=HISTORIA[id];
+  if(!n)return;
+  stage.style.transition='opacity .8s';
+  stage.style.opacity=0;
+  setTimeout(()=>{
+    setAtm(n.atm);
+    if(!reduceMotion)setParticulas(n.part);
+    stage.innerHTML=escenaHTML(n);
+    stage.style.opacity=1;
+    revelar(n,id);
+    scrollTo({top:0,behavior:'instant'});
+  },850);
+}
+
+function revelar(n,id){
+  const els=[...stage.querySelectorAll('.eyebrow,.scene-title,.ornamento,.sello-recuerdo,.parrafo')];
+  let t=300;
+  els.forEach(el=>{
+    setTimeout(()=>el.classList.add('visible'),t);
+    t+=el.classList.contains('parrafo')?950:450;
+  });
+  const fin=()=>{
+    const ch=stage.querySelector('.choices'),bt=stage.querySelector('.btn-continuar'),
+          cw=stage.querySelector('.campana-wrap');
+    if(cw)cw.classList.add('visible');
+    if(ch)ch.classList.add('visible');
+    if(bt)bt.classList.add('visible');
+  };
+  setTimeout(fin,reduceMotion?100:t+200);
+
+  /* listeners */
+  stage.querySelectorAll('.choice').forEach(b=>b.addEventListener('click',()=>{
+    const c=n.choices[+b.dataset.i];
+    if(c.set)estado[c.set]=true;
+    mostrar(c.next);
+  }));
+  const bt=stage.querySelector('.btn-continuar');
+  if(bt&&n.next)bt.addEventListener('click',()=>mostrar(n.next.next));
+
+  const camp=stage.querySelector('#la-campana');
+  if(camp){
+    let sonada=false;
+    camp.addEventListener('click',()=>{
+      camp.classList.remove('sonando');void camp.offsetWidth;
+      camp.classList.add('sonando');
+      sonarCampana();rafaga(46);
+      if(!sonada){sonada=true;
+        setTimeout(()=>mostrar('memoria_campana'),2600);}
+    });
+  }
+  if(n.final)montarFinal();
+}
+
+/* ---------- final: glitch, mensaje, jardín ---------- */
+function montarFinal(){
+  setTimeout(()=>{ if(!reduceMotion) stage.classList.add('glitch');
+    setTimeout(()=>stage.classList.remove('glitch'),2000); },2200);
+
+  const total = HISTORIA.final.parrafos.length*950+1400;
+  setTimeout(()=>{
+    const div=document.createElement('div');
+    div.className='mensaje-final';
+    div.innerHTML=`<p>[TE QUIERO 3000]</p><div class="firma">— G.</div>`;
+    stage.appendChild(div);
+    requestAnimationFrame(()=>div.classList.add('visible'));
+
+    const jardin=document.createElement('div');
+    jardin.className='jardin';
+    let flores='';
+    for(let i=0;i<9;i++){
+      const lirio=i%2===0;
+      const d=(i*.18).toFixed(2);
+      flores+=lirio
+        ?`<div class="flor lirio" style="animation-delay:${d}s"><div class="cabeza">
+            <div class="petalo"></div><div class="petalo"></div><div class="petalo"></div>
+            <div class="petalo"></div><div class="petalo"></div><div class="petalo"></div>
+            <div class="centro"></div></div><div class="tallo"></div></div>`
+        :`<div class="flor tulipan" style="animation-delay:${d}s"><div class="cabeza">
+            <div class="petalo"></div><div class="petalo"></div><div class="petalo"></div>
+          </div><div class="tallo"></div></div>`;
+    }
+    jardin.innerHTML=flores;
+    stage.appendChild(jardin);
+    setTimeout(()=>{jardin.classList.add('visible');rafaga(60);},900);
+
+    const re=document.createElement('button');
+    re.className='btn-continuar';re.textContent='Volver a vivirlo';
+    stage.appendChild(re);
+    setTimeout(()=>re.classList.add('visible'),2200);
+    re.addEventListener('click',()=>{
+      estado={paciencia:false,alto:false,cristal:false,espejo:false};
+      mostrar('bosque');
+    });
+  }, reduceMotion?600:total);
+}
+
+/* ---------- título ---------- */
+(function animarNombre(){
+  const h=$('#nombre-animado'),txt=h.textContent;h.textContent='';
+  [...txt].forEach((l,i)=>{
+    const s=document.createElement('span');s.textContent=l;
+    s.style.animationDelay=(0.8+i*.16)+'s';h.appendChild(s);
+  });
+})();
+$('#btn-empezar').addEventListener('click',()=>{
+  $('#titulo').classList.add('oculto');
+  if(actx==null){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  setTimeout(()=>mostrar('bosque'),700);
+});
+setAtm('final'); /* fondo sereno bajo el título */
+</script>
+</body>
+</html>
